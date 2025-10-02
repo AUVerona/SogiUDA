@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Planner Percorsi Formativi</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-shell">
+        <header class="hero">
+            <div class="hero__content">
+                <span class="hero__eyebrow">Piano formativo modulare</span>
+                <h1>Distribuisci le ore tra gli obiettivi di apprendimento</h1>
+                <p>
+                    Scegli il percorso formativo e assegna le ore previste a ciascun descrittore.
+                    Il sistema ti guida nel rispettare i vincoli orari di ogni voce.
+                </p>
+                <div class="level-picker" role="group" aria-label="Seleziona percorso">
+                    <button type="button" class="level-button" data-level="Alpha">Alpha</button>
+                    <button type="button" class="level-button" data-level="Primo">Primo</button>
+                    <button type="button" class="level-button" data-level="Secondo">Secondo</button>
+                </div>
+            </div>
+            <div class="hero__illustration" aria-hidden="true">
+                <div class="glow"></div>
+                <div class="planet"></div>
+                <div class="orbit orbit--one"></div>
+                <div class="orbit orbit--two"></div>
+            </div>
+        </header>
+
+        <main class="layout">
+            <section id="details-panel" class="details-panel" aria-live="polite">
+                <div class="empty-state">
+                    <h2>Seleziona un percorso per iniziare</h2>
+                    <p>Scegli <strong>Alpha</strong>, <strong>Primo</strong> o <strong>Secondo</strong> per visualizzare i moduli disponibili.</p>
+                </div>
+            </section>
+
+            <aside id="summary-panel" class="summary-panel hidden" aria-live="polite">
+                <h2>Riepilogo</h2>
+                <div id="summary-content" class="summary-grid"></div>
+            </aside>
+        </main>
+
+        <footer class="app-footer">
+            <button type="button" id="print-plan" class="btn-primary" disabled aria-disabled="true">
+                Esporta PDF
+            </button>
+        </footer>
+    </div>
+
+    <div id="toast" class="toast" role="alert" aria-hidden="true"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="planner.js"></script>
+</body>
+</html>
