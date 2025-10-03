@@ -1989,26 +1989,18 @@ body {
 @media (max-width: 479px) {
     body {
         padding: 0;
-        overflow-x: hidden; /* Previene scroll orizzontale */
+        margin: 0;
+        overflow-x: hidden;
     }
     
-    /* Sicurezza globale per prevenire overflow */
+    /* Forza full width su tutti gli elementi */
     * {
-        max-width: 100%;
-        box-sizing: border-box;
-    }
-    
-    .app-container {
-        padding: 8px;
-        margin: 16px auto;
-        border-radius: 12px;
-        width: 100%;
         max-width: 100vw;
         box-sizing: border-box;
     }
     
-    /* Layout SecondoLivello mobile - forza centratura */
-    .layout.second-level-layout {
+    .app-shell,
+    .app-container {
         padding: 0;
         margin: 0;
         width: 100%;
@@ -2016,6 +2008,19 @@ body {
         box-sizing: border-box;
     }
     
+    /* Layout SecondoLivello mobile - full width */
+    .layout,
+    .layout.second-level-layout {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+        gap: 12px;
+        grid-template-columns: 1fr;
+    }
+    
+    .details-panel,
     .details-panel.second-level-active {
         padding: 0;
         margin: 0;
@@ -2025,19 +2030,20 @@ body {
     }
     
     .hero {
-        padding: clamp(16px, 3vw, 24px);
-        gap: clamp(16px, 4vw, 24px);
+        padding: 16px 12px;
+        gap: 16px;
         grid-template-columns: 1fr;
-        border-radius: 12px;
+        border-radius: 0;
+        margin: 0;
     }
     
     .hero-text h1 {
-        font-size: clamp(1.5rem, 6vw, 2rem);
+        font-size: clamp(1.4rem, 6vw, 1.8rem);
         line-height: 1.2;
     }
     
     .hero-text p {
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         line-height: 1.4;
     }
     
@@ -2045,54 +2051,51 @@ body {
         flex-direction: column;
         gap: 8px;
         align-items: stretch;
+        padding: 0;
+        margin: 0;
     }
     
     .level-button {
         padding: 12px 16px;
-        font-size: 0.9rem;
+        font-size: 0.85rem;
         text-align: center;
-        min-height: 44px; /* Touch target minimum */
+        min-height: 44px;
+        width: 100%;
     }
     
     .btn-primary {
         padding: 12px 24px;
         font-size: 0.9rem;
         width: 100%;
-        max-width: 280px;
-        margin: 0 auto;
+        max-width: 100%;
+        margin: 0;
     }
     
-    /* Layout mobile */
-    .layout {
-        gap: 16px;
-        grid-template-columns: 1fr;
-        padding: 0;
-    }
-    
+    /* Summary panel extra small */
     .summary-panel {
-        order: 2; /* Sposta summary sotto i dettagli su mobile */
-        padding: 16px;
-        border-radius: 12px;
+        padding: 12px 10px;
+        border-radius: 0;
+        margin: 0;
+        width: 100%;
+        order: 2;
     }
     
     .details-panel {
         order: 1;
-        padding: 16px;
-        border-radius: 12px;
+        padding: 0;
+        border-radius: 0;
     }
     
     /* Subtopics mobile */
-    /* UDA/Subtopic mobile anti-overflow */
     .subtopic {
-        padding: 12px;
-        border-radius: 8px;
-        gap: 12px;
+        padding: 16px 12px;
+        border-radius: 0;
+        margin: 0 0 8px 0;
         width: 100%;
-        max-width: 100%;
+        max-width: 100vw;
         box-sizing: border-box;
         overflow: hidden;
         word-wrap: break-word;
-        margin: 0;
     }
     
     .subtopic-header {
@@ -2776,24 +2779,113 @@ body {
    ======================================== */
 
 @media (max-width: 767px) {
-    /* Contenitore UDA mobile completamente ridisegnato */
+    /* ========================================
+       MOBILE OPTIMIZATION - FULL WIDTH DESIGN
+       ======================================== */
+    
+    /* Contenitore principale mobile - zero padding laterale */
+    body {
+        padding: 0;
+        margin: 0;
+        overflow-x: hidden;
+    }
+    
+    .app-shell {
+        padding: 12px 0;
+        gap: 16px;
+        width: 100%;
+        max-width: 100vw;
+    }
+    
+    /* Hero mobile compatto con padding interno */
+    .hero {
+        padding: 20px 16px;
+        gap: 16px;
+        border-radius: 0;
+        grid-template-columns: 1fr;
+        margin: 0;
+        width: 100%;
+    }
+    
+    .hero-text h1 {
+        font-size: 1.5rem;
+        line-height: 1.3;
+    }
+    
+    .hero-text p {
+        font-size: 0.9rem;
+    }
+    
+    /* Sezioni/Livelli mobile - full width */
+    .section {
+        padding: 12px 12px;
+        border-radius: 0;
+        margin: 0;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+    }
+    
+    .section-header {
+        padding: 16px 12px;
+        border-radius: 12px;
+        margin: 0 0 12px 0;
+    }
+    
+    .section-title {
+        font-size: 1.1rem;
+    }
+    
+    .section-content {
+        padding: 0;
+        width: 100%;
+    }
+    
+    /* ========================================
+       CARD UDA MOBILE - FULL WIDTH DESIGN
+       ======================================== */
+    
     .subtopic {
-        background: white;
-        border: 1px solid var(--primary-color);
-        border-radius: 16px;
-        padding: 16px;
-        margin: 12px 0;
-        box-shadow: 0 4px 12px rgba(3, 105, 161, 0.08);
+        background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+        border: none;
+        border-left: 4px solid var(--accent);
+        border-right: 4px solid var(--accent);
+        border-radius: 0;
+        padding: 20px 16px;
+        margin: 0 0 12px 0;
+        box-shadow: 0 2px 8px rgba(3, 105, 161, 0.1);
         display: flex;
         flex-direction: column;
-        gap: 12px;
+        gap: 16px;
         width: 100%;
-        max-width: 100%;
+        max-width: 100vw;
         box-sizing: border-box;
-        overflow: hidden;
+        position: relative;
+        overflow: visible;
+        transition: all 0.3s ease;
+    }
+    
+    .subtopic::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--accent), var(--secondary));
+    }
+    
+    .subtopic::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: linear-gradient(90deg, var(--secondary), var(--accent));
     }
 
-    /* Header mobile - layout verticale */
+    /* Header UDA mobile */
     .subtopic-header {
         display: flex;
         flex-direction: column;
@@ -2801,424 +2893,586 @@ body {
         width: 100%;
     }
 
-    /* Info section mobile - layout pulito */
+    /* Codice UDA - Badge stile moderno */
+    .subtopic-code {
+        font-size: 0.7rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        color: white;
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        padding: 6px 12px;
+        border-radius: 12px;
+        align-self: flex-start;
+        box-shadow: 0 2px 8px rgba(3, 105, 161, 0.25);
+    }
+
+    /* Titolo UDA - Leggibile e prominente */
+    .subtopic-title {
+        font-size: 1.1rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        line-height: 1.4;
+        margin: 0;
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+    }
+
+    /* Info section mobile */
     .subtopic-info {
         display: flex;
         flex-direction: column;
-        gap: 8px;
+        gap: 12px;
         width: 100%;
     }
 
-    /* Codice UDA mobile - piccolo e discreto */
-    .subtopic-code {
-        font-size: 0.75rem;
-        font-weight: 600;
-        color: var(--primary-color);
-        background: rgba(3, 105, 161, 0.1);
-        padding: 4px 8px;
-        border-radius: 8px;
-        align-self: flex-start;
-        white-space: nowrap;
-    }
-
-    /* Titolo UDA mobile - grande e leggibile */
-    .subtopic-title {
-        font-size: 1rem;
-        font-weight: 600;
-        color: var(--text-primary);
-        line-height: 1.4;
-        word-wrap: break-word;
-        overflow-wrap: break-word;
-        hyphens: auto;
-        white-space: normal;
-        margin: 4px 0;
-    }
-
-    /* Badge mobile - layout orizzontale compatto */
+    /* Badges container - Design pulito */
     .subtopic-badges {
         display: flex;
-        flex-direction: row;
         flex-wrap: wrap;
-        gap: 8px;
+        gap: 10px;
         align-items: center;
-        justify-content: flex-start;
-        width: 100%;
     }
 
-    /* Ore totali mobile - stile moderno */
+    /* Badge ore totali */
     .subtopic-hours {
-        background: linear-gradient(135deg, var(--success-color), #047857);
+        background: linear-gradient(135deg, var(--tertiary), #047857);
         color: white;
-        font-size: 0.8rem;
-        font-weight: 600;
-        padding: 6px 12px;
-        border-radius: 20px;
-        white-space: nowrap;
-        box-shadow: 0 2px 4px rgba(5, 150, 105, 0.2);
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 16px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+    
+    .subtopic-hours::before {
+        content: "⏱️";
+        font-size: 1rem;
     }
 
-    /* Tag distanza mobile - stile distintivo */
+    /* Badge distanza */
     .subtopic-distance-tag {
-        background: linear-gradient(135deg, var(--warning-color), #d97706);
+        background: linear-gradient(135deg, var(--warning), #ea580c);
         color: white;
-        font-size: 0.8rem;
-        font-weight: 600;
-        padding: 6px 12px;
-        border-radius: 20px;
-        white-space: nowrap;
-        box-shadow: 0 2px 4px rgba(217, 119, 6, 0.2);
+        font-size: 0.85rem;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 16px;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        box-shadow: 0 4px 12px rgba(217, 119, 6, 0.25);
     }
 
     .subtopic-distance-tag::before {
-        content: "📱 ";
-        margin-right: 4px;
+        content: "�";
     }
 
-    /* Azioni mobile - bottoni touch-friendly */
+    /* Descrizione UDA mobile */
+    .uda-description {
+        background: rgba(3, 105, 161, 0.04);
+        border-left: 3px solid var(--accent);
+        border-radius: 8px;
+        padding: 14px;
+        font-size: 0.9rem;
+        line-height: 1.6;
+        color: var(--text-secondary);
+        margin: 8px 0;
+    }
+
+    /* Controlli distribuzione ore - Card stile */
+    .subtopic-controls {
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        border: 2px solid rgba(3, 105, 161, 0.1);
+        border-radius: 16px;
+        padding: 20px;
+        margin: 8px 0;
+    }
+
+    .subtopic-distribution {
+        font-size: 0.95rem;
+        font-weight: 600;
+        margin-bottom: 16px;
+        text-align: center;
+        color: var(--accent-strong);
+    }
+
+    /* Sliders ottimizzati touch */
+    .subtopic-slider,
+    .subtopic-distance-slider {
+        width: 100%;
+        height: 10px;
+        border-radius: 10px;
+        outline: none;
+        margin: 12px 0;
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        cursor: pointer;
+        touch-action: manipulation;
+    }
+
+    .subtopic-slider::-webkit-slider-thumb,
+    .subtopic-distance-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        border: 4px solid white;
+        box-shadow: 0 4px 16px rgba(3, 105, 161, 0.4);
+        cursor: pointer;
+        transition: all 0.2s ease;
+    }
+    
+    .subtopic-slider::-webkit-slider-thumb:active,
+    .subtopic-distance-slider::-webkit-slider-thumb:active {
+        transform: scale(1.15);
+        box-shadow: 0 6px 20px rgba(3, 105, 161, 0.5);
+    }
+
+    .subtopic-slider::-moz-range-thumb,
+    .subtopic-distance-slider::-moz-range-thumb {
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        border: 4px solid white;
+        box-shadow: 0 4px 16px rgba(3, 105, 161, 0.4);
+        cursor: pointer;
+    }
+
+    /* Valori ore - Display prominente */
+    .control-group {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin: 12px 0;
+    }
+    
+    .control-label {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-align: center;
+    }
+    
+    .control-value {
+        font-size: 1.8rem;
+        font-weight: 900;
+        color: var(--accent);
+        text-align: center;
+        text-shadow: 0 2px 4px rgba(3, 105, 161, 0.15);
+    }
+
+    /* Azioni UDA mobile - Touch-friendly */
     .subtopic-actions {
         display: flex;
-        flex-direction: row;
-        gap: 12px;
-        justify-content: center;
+        gap: 10px;
         width: 100%;
-        margin-top: 8px;
-        padding-top: 12px;
-        border-top: 1px solid var(--border);
+        margin-top: 12px;
+        padding-top: 16px;
+        border-top: 2px solid rgba(3, 105, 161, 0.1);
     }
 
     .edit-uda-button,
     .delete-uda-button {
         flex: 1;
-        max-width: 120px;
-        padding: 12px 16px;
-        font-size: 0.85rem;
-        font-weight: 600;
-        border-radius: 12px;
-        border: 2px solid currentColor;
-        background: white;
-        color: var(--primary-color);
-        cursor: pointer;
-        touch-action: manipulation;
-        min-height: 44px; /* Touch target Apple guidelines */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 6px;
-        transition: all 0.2s ease;
-    }
-
-    .edit-uda-button:hover,
-    .edit-uda-button:focus {
-        background: var(--primary-color);
-        color: white;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(3, 105, 161, 0.2);
-    }
-
-    .delete-uda-button {
-        color: var(--error-color);
-        border-color: var(--error-color);
-    }
-
-    .delete-uda-button:hover,
-    .delete-uda-button:focus {
-        background: var(--error-color);
-        color: white;
-        transform: translateY(-1px);
-        box-shadow: 0 4px 8px rgba(239, 68, 68, 0.2);
-    }
-
-    /* Descrizione UDA mobile - contenuto collapsabile */
-    .uda-description {
-        background: rgba(3, 105, 161, 0.05);
-        border: 1px solid rgba(3, 105, 161, 0.1);
-        border-radius: 12px;
-        padding: 12px;
-        font-size: 0.85rem;
-        line-height: 1.5;
-        color: var(--text-secondary);
-        margin: 8px 0;
-        
-        /* Limite altezza con espansione */
-        max-height: 4.5rem; /* ~3 righe */
-        overflow: hidden;
-        position: relative;
-        transition: max-height 0.3s ease;
-    }
-
-    .uda-description.expanded {
-        max-height: none;
-    }
-
-    /* Controlli mobile - sliders ottimizzati per touch */
-    .subtopic-controls {
-        background: rgba(248, 250, 252, 0.8);
-        border-radius: 12px;
-        padding: 16px;
-        margin: 12px 0;
-        border: 1px solid var(--border);
-    }
-
-    .subtopic-distribution {
+        padding: 14px 20px;
         font-size: 0.9rem;
-        margin-bottom: 12px;
-        text-align: center;
-        font-weight: 500;
-        color: var(--text-primary);
-    }
-
-    .subtopic-slider,
-    .subtopic-distance-slider {
-        width: 100%;
-        height: 8px;
-        border-radius: 4px;
-        background: linear-gradient(to right, #e2e8f0, #cbd5e1);
-        outline: none;
-        margin: 8px 0;
-        cursor: pointer;
-    }
-
-    .subtopic-slider::-webkit-slider-thumb,
-    .subtopic-distance-slider::-webkit-slider-thumb {
-        width: 24px;
-        height: 24px;
-        border-radius: 50%;
-        background: var(--primary-color);
-        border: 3px solid white;
-        box-shadow: 0 2px 8px rgba(3, 105, 161, 0.3);
-        cursor: pointer;
-    }
-
-    /* Bottone aggiungi UDA mobile - prominente */
-    .add-uda-button {
-        width: 100%;
-        padding: 16px 20px;
-        font-size: 1rem;
         font-weight: 700;
-        background: linear-gradient(135deg, var(--primary-color), var(--primary-darker));
-        color: white;
-        border: none;
         border-radius: 16px;
-        margin: 20px 0;
+        border: none;
         cursor: pointer;
         touch-action: manipulation;
-        min-height: 56px; /* Prominente per azione primaria */
-        box-shadow: 0 6px 20px rgba(3, 105, 161, 0.25);
+        min-height: 50px;
         display: flex;
         align-items: center;
         justify-content: center;
         gap: 8px;
         transition: all 0.3s ease;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
 
-    .add-uda-button:hover,
-    .add-uda-button:focus {
-        transform: translateY(-2px);
-        box-shadow: 0 8px 25px rgba(3, 105, 161, 0.35);
+    .edit-uda-button {
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        color: white;
     }
-
-    .add-uda-button::before {
-        content: "➕";
+    
+    .edit-uda-button::before {
+        content: "✏️";
         font-size: 1.1rem;
     }
 
+    .edit-uda-button:active {
+        transform: scale(0.97);
+        box-shadow: 0 2px 8px rgba(3, 105, 161, 0.3);
+    }
+
+    .delete-uda-button {
+        background: linear-gradient(135deg, var(--danger), #b91c1c);
+        color: white;
+    }
+    
+    .delete-uda-button::before {
+        content: "🗑️";
+        font-size: 1.1rem;
+    }
+
+    .delete-uda-button:active {
+        transform: scale(0.97);
+        box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
+    }
+
+    /* Bottone aggiungi UDA - Full width */
+    .add-uda-button {
+        width: 100%;
+        max-width: 100vw;
+        padding: 18px 24px;
+        font-size: 1.05rem;
+        font-weight: 800;
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        color: white;
+        border: none;
+        border-radius: 0;
+        margin: 16px 0;
+        cursor: pointer;
+        touch-action: manipulation;
+        min-height: 60px;
+        box-shadow: 0 4px 12px rgba(3, 105, 161, 0.25);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 12px;
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+    
+    .add-uda-button::before {
+        content: "➕";
+        font-size: 1.3rem;
+    }
+
+    .add-uda-button:active {
+        transform: scale(0.99);
+        box-shadow: 0 2px 8px rgba(3, 105, 161, 0.3);
+    }
+
     /* ========================================
-       FORM UDA MOBILE - FULLSCREEN EXPERIENCE
+       FORM MOBILE - FULLSCREEN OTTIMIZZATO
        ======================================== */
     
-    /* Modal overlay mobile - fullscreen */
-    .uda-form-container {
+    .uda-form-container,
+    .subtopic-modal-backdrop {
         position: fixed;
         top: 0;
         left: 0;
         right: 0;
         bottom: 0;
-        background: rgba(0, 0, 0, 0.8);
-        z-index: 10000;
+        background: rgba(0, 0, 0, 0.85);
+        z-index: 9999;
         display: flex;
         align-items: stretch;
         justify-content: center;
         padding: 0;
+        backdrop-filter: blur(4px);
     }
 
-    /* Form mobile - occupa tutto lo schermo */
-    .uda-form {
+    .uda-form,
+    .subtopic-modal {
         background: white;
         width: 100%;
         height: 100%;
+        max-height: 100vh;
         border-radius: 0;
         display: flex;
         flex-direction: column;
-        max-height: 100vh;
         overflow: hidden;
+        animation: slideUp 0.3s ease;
+    }
+    
+    @keyframes slideUp {
+        from {
+            transform: translateY(100%);
+        }
+        to {
+            transform: translateY(0);
+        }
     }
 
-    /* Header form mobile - fisso in alto */
-    .uda-form-header {
-        background: linear-gradient(135deg, var(--primary-color), var(--primary-darker));
+    /* Header form - Sticky top */
+    .uda-form-header,
+    .subtopic-modal-header {
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
         color: white;
-        padding: 20px 16px;
-        border-radius: 0;
+        padding: 24px 20px;
         position: sticky;
         top: 0;
-        z-index: 1;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
-    .uda-form-header h4 {
-        font-size: 1.2rem;
-        font-weight: 700;
+    .uda-form-header h4,
+    .subtopic-modal-header h3 {
+        font-size: 1.3rem;
+        font-weight: 800;
         margin: 0;
+        flex: 1;
         text-align: center;
     }
+    
+    .modal-close-button {
+        background: rgba(255, 255, 255, 0.2);
+        border: none;
+        color: white;
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        font-size: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.2s ease;
+    }
+    
+    .modal-close-button:active {
+        background: rgba(255, 255, 255, 0.3);
+        transform: scale(0.95);
+    }
 
-    /* Body form mobile - scrollabile */
-    .uda-form-body {
+    /* Body form - Scrollable */
+    .uda-form-body,
+    .subtopic-modal-body {
         flex: 1;
-        padding: 20px 16px;
+        padding: 24px 20px;
         overflow-y: auto;
         -webkit-overflow-scrolling: touch;
-        background: #fafbfc;
+        background: linear-gradient(to bottom, #ffffff 0%, #f8fafc 100%);
     }
 
-    /* Gruppi di input mobile - spazio generoso */
-    .uda-form-body .form-group {
-        margin-bottom: 24px;
+    /* Form groups */
+    .form-group {
+        margin-bottom: 28px;
     }
 
-    .uda-form-body label {
+    .form-group label {
         display: block;
-        font-size: 0.95rem;
-        font-weight: 600;
+        font-size: 1rem;
+        font-weight: 700;
         color: var(--text-primary);
-        margin-bottom: 8px;
+        margin-bottom: 10px;
     }
 
-    .uda-form-body input[type="text"],
-    .uda-form-body textarea {
+    .form-group input[type="text"],
+    .form-group input[type="number"],
+    .form-group textarea,
+    .form-group select {
         width: 100%;
-        padding: 16px 12px;
-        font-size: 1rem;
-        border: 2px solid var(--border);
-        border-radius: 12px;
+        padding: 16px 14px;
+        font-size: 1.05rem;
+        border: 2px solid rgba(3, 105, 161, 0.2);
+        border-radius: 14px;
         background: white;
         color: var(--text-primary);
         box-sizing: border-box;
-        transition: all 0.2s ease;
-        min-height: 50px; /* Touch-friendly */
+        transition: all 0.3s ease;
+        min-height: 54px;
     }
 
-    .uda-form-body input[type="text"]:focus,
-    .uda-form-body textarea:focus {
-        border-color: var(--primary-color);
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+        border-color: var(--accent);
         outline: none;
-        box-shadow: 0 0 0 3px rgba(3, 105, 161, 0.1);
-        transform: scale(1.01);
+        box-shadow: 0 0 0 4px rgba(3, 105, 161, 0.1);
+        transform: translateY(-2px);
     }
 
-    .uda-form-body textarea {
-        min-height: 120px;
+    .form-group textarea {
+        min-height: 140px;
         resize: vertical;
         font-family: inherit;
-        line-height: 1.5;
+        line-height: 1.6;
     }
 
-    /* Controllo ore mobile - slider prominente */
+    /* Range sliders nel form */
     .slider-container {
-        background: white;
-        padding: 20px;
-        border-radius: 16px;
-        border: 2px solid var(--border);
-        margin: 16px 0;
+        background: linear-gradient(135deg, #f8fafc, #e2e8f0);
+        padding: 24px;
+        border-radius: 18px;
+        border: 2px solid rgba(3, 105, 161, 0.15);
+        margin: 20px 0;
     }
 
-    .slider-container label {
-        font-size: 1rem;
+    .slider-label {
+        font-size: 1.05rem;
         font-weight: 700;
-        color: var(--primary-color);
-        margin-bottom: 12px;
+        color: var(--accent-strong);
         text-align: center;
         display: block;
+        margin-bottom: 16px;
     }
 
     .slider-value {
-        font-size: 2rem;
+        font-size: 2.5rem;
         font-weight: 900;
-        color: var(--primary-color);
+        color: var(--accent);
         text-align: center;
-        margin: 16px 0;
-        text-shadow: 0 2px 4px rgba(3, 105, 161, 0.2);
+        margin: 20px 0;
+        text-shadow: 0 2px 6px rgba(3, 105, 161, 0.2);
     }
 
     input[type="range"] {
         width: 100%;
         height: 12px;
-        border-radius: 6px;
-        background: linear-gradient(to right, #e2e8f0, var(--primary-color));
+        border-radius: 10px;
         outline: none;
-        margin: 16px 0;
+        margin: 20px 0;
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
     }
 
     input[type="range"]::-webkit-slider-thumb {
-        width: 28px;
-        height: 28px;
+        -webkit-appearance: none;
+        width: 36px;
+        height: 36px;
         border-radius: 50%;
-        background: var(--primary-color);
-        border: 4px solid white;
-        box-shadow: 0 4px 12px rgba(3, 105, 161, 0.4);
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        border: 5px solid white;
+        box-shadow: 0 6px 20px rgba(3, 105, 161, 0.5);
+        cursor: pointer;
+    }
+    
+    input[type="range"]::-webkit-slider-thumb:active {
+        transform: scale(1.2);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
+        border: 5px solid white;
+        box-shadow: 0 6px 20px rgba(3, 105, 161, 0.5);
         cursor: pointer;
     }
 
-    /* Footer form mobile - azioni fisse */
-    .uda-form-footer {
+    /* Footer form - Sticky bottom */
+    .uda-form-footer,
+    .subtopic-modal-footer {
         background: white;
-        padding: 16px;
-        border-top: 1px solid var(--border);
+        padding: 20px;
+        border-top: 2px solid rgba(3, 105, 161, 0.1);
         position: sticky;
         bottom: 0;
-        z-index: 1;
-        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+        z-index: 10;
+        box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.08);
     }
 
-    .uda-form-footer .form-actions {
+    .form-actions {
         display: flex;
         gap: 12px;
     }
 
-    .uda-form-footer button {
+    .form-button,
+    .modal-button {
         flex: 1;
-        padding: 16px 20px;
-        font-size: 1rem;
-        font-weight: 700;
-        border-radius: 12px;
+        padding: 18px 24px;
+        font-size: 1.05rem;
+        font-weight: 800;
+        border-radius: 16px;
         border: none;
         cursor: pointer;
         touch-action: manipulation;
-        min-height: 52px;
-        transition: all 0.2s ease;
+        min-height: 58px;
+        transition: all 0.3s ease;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
     }
 
-    .btn-primary {
-        background: linear-gradient(135deg, var(--primary-color), var(--primary-darker));
+    .btn-primary,
+    .form-button.primary {
+        background: linear-gradient(135deg, var(--accent), var(--accent-strong));
         color: white;
-        box-shadow: 0 4px 12px rgba(3, 105, 161, 0.3);
+        box-shadow: 0 6px 20px rgba(3, 105, 161, 0.35);
     }
 
-    .btn-primary:hover,
-    .btn-primary:focus {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 16px rgba(3, 105, 161, 0.4);
+    .btn-primary:active {
+        transform: scale(0.97);
+        box-shadow: 0 4px 12px rgba(3, 105, 161, 0.4);
     }
 
-    .btn-secondary {
+    .btn-secondary,
+    .form-button.secondary {
         background: white;
         color: var(--text-secondary);
-        border: 2px solid var(--border);
+        border: 2px solid rgba(3, 105, 161, 0.2);
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
-    .btn-secondary:hover,
-    .btn-secondary:focus {
-        background: var(--surface);
-        border-color: var(--text-secondary);
+    .btn-secondary:active {
+        background: var(--surface-muted);
+        transform: scale(0.97);
+    }
+    
+    /* Summary panel mobile - Full width */
+    .summary-panel {
+        padding: 16px 12px;
+        border-radius: 0;
+        margin: 0 0 16px 0;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+    }
+    
+    .summary-stats {
+        flex-direction: column;
+        gap: 12px;
+    }
+    
+    .stat-card {
+        padding: 16px;
+        border-radius: 12px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Layout e details panel mobile - Full width */
+    .layout {
+        padding: 0;
+        gap: 12px;
+        width: 100%;
+        max-width: 100vw;
+    }
+    
+    .details-panel {
+        padding: 12px;
+        border-radius: 0;
+        margin: 0;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+    }
+    
+    /* Liste UDA - Full width */
+    .subtopic-list {
+        width: 100%;
+        max-width: 100vw;
+        padding: 0;
+        margin: 0;
+        box-sizing: border-box;
     }
 }
