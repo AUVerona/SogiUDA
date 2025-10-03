@@ -744,7 +744,13 @@ class CurriculumPlanner {
             summaryContent: document.getElementById('summary-content'),
             toast: document.getElementById('toast'),
             levelButtons: Array.from(document.querySelectorAll('.level-button')),
-            printButton: document.getElementById('print-plan')
+            levelCards: Array.from(document.querySelectorAll('.level-card')),
+            welcomeScreen: document.getElementById('welcome-screen'),
+            mainContent: document.getElementById('main-content'),
+            printButton: document.getElementById('print-plan'),
+            backButton: document.getElementById('back-to-welcome'),
+            primoLivelloPicker: document.getElementById('primo-livello-picker'),
+            secondoLivelloPicker: document.getElementById('secondo-livello-picker')
         };
 
         this.initializeMinimumHours();
@@ -753,9 +759,27 @@ class CurriculumPlanner {
     }
 
     bindEvents() {
+        // Eventi per le card della welcome screen
+        this.elements.levelCards.forEach((card) => {
+            card.addEventListener('click', () => {
+                const level = card.dataset.level;
+                const isPrimoLivello = ['Alpha', 'Primo', 'Secondo'].includes(level);
+                this.showMainContent(isPrimoLivello);
+                this.setLevel(level);
+            });
+        });
+
+        // Eventi per i bottoni del level picker
         this.elements.levelButtons.forEach((button) => {
             button.addEventListener('click', () => this.setLevel(button.dataset.level));
         });
+
+        // Pulsante "Indietro"
+        if (this.elements.backButton) {
+            this.elements.backButton.addEventListener('click', () => {
+                this.backToWelcome();
+            });
+        }
 
         if (this.elements.printButton) {
             this.elements.printButton.addEventListener('click', () => this.exportToPdf());
@@ -781,6 +805,37 @@ class CurriculumPlanner {
                 return;
             }
         });
+    }
+
+    showMainContent(isPrimoLivello) {
+        if (this.elements.welcomeScreen) {
+            this.elements.welcomeScreen.classList.add('hidden');
+        }
+        if (this.elements.mainContent) {
+            this.elements.mainContent.classList.remove('hidden');
+        }
+        
+        // Mostra solo i bottoni pertinenti
+        if (isPrimoLivello) {
+            this.elements.primoLivelloPicker?.classList.remove('hidden');
+            this.elements.secondoLivelloPicker?.classList.add('hidden');
+        } else {
+            this.elements.primoLivelloPicker?.classList.add('hidden');
+            this.elements.secondoLivelloPicker?.classList.remove('hidden');
+        }
+    }
+
+    backToWelcome() {
+        if (this.elements.welcomeScreen) {
+            this.elements.welcomeScreen.classList.remove('hidden');
+        }
+        if (this.elements.mainContent) {
+            this.elements.mainContent.classList.add('hidden');
+        }
+        
+        // Nascondi entrambi i picker
+        this.elements.primoLivelloPicker?.classList.add('hidden');
+        this.elements.secondoLivelloPicker?.classList.add('hidden');
     }
 
     setLevel(levelKey) {
@@ -3254,37 +3309,110 @@ class CurriculumPlanner {
 
         const presenceHours = Math.max(0, totals.assigned - totals.distanceAssigned);
 
+        // Calcola dettagli ore mancanti per sezione
+        const missingSectionsDetails = [];
+        levelData.levels.forEach((level) => {
+            level.sections.forEach((section) => {
+                const remaining = this.sectionRemaining(section);
+                if (remaining > 0) {
+                    missingSectionsDetails.push(`${section.title}: ${remaining}h mancanti`);
+                }
+            });
+        });
+
+        const missingDetailsTooltip = missingSectionsDetails.length > 0 
+            ? missingSectionsDetails.join('\n') 
+            : 'Tutte le ore sono state assegnate!';
+
         const cards = [
-            { label: 'Ore disponibili', value: `${totals.total} h` },
-            { label: 'Ore assegnate', value: `${totals.assigned} h` },
-            { label: 'Ore rimanenti', value: `${totals.remaining} h` },
+            { 
+                label: 'Ore disponibili', 
+                value: `${totals.total} h`,
+                tooltip: `Totale ore disponibili per questo percorso`
+            },
+            { 
+                label: 'Ore assegnate', 
+                value: `${totals.assigned} h`,
+                tooltip: totals.assigned < totals.total 
+                    ? `Hai assegnato ${totals.assigned}h su ${totals.total}h disponibili` 
+                    : 'Hai assegnato tutte le ore disponibili!'
+            },
+            { 
+                label: 'Ore rimanenti', 
+                value: `${totals.remaining} h`,
+                tooltip: totals.remaining > 0 
+                    ? `Dettaglio ore mancanti:\n${missingDetailsTooltip}` 
+                    : 'Nessuna ora rimanente da assegnare'
+            },
             {
                 label: 'Ore a distanza',
                 value: totals.distanceCap > 0
                     ? `${totals.distanceAssigned}/${totals.distanceCap} h`
-                    : `${totals.distanceAssigned} h`
+                    : `${totals.distanceAssigned} h`,
+                tooltip: totals.distanceCap > 0
+                    ? `Ore a distanza assegnate: ${totals.distanceAssigned}h\nMassimo consentito: ${totals.distanceCap}h`
+                    : `Ore a distanza assegnate: ${totals.distanceAssigned}h`
             },
-            { label: 'Ore in presenza', value: `${presenceHours} h` },
-            { label: 'Sezioni complete', value: `${totals.completedSections}/${totals.totalSections}` }
+            { 
+                label: 'Ore in presenza', 
+                value: `${presenceHours} h`,
+                tooltip: `Ore in presenza calcolate: ${presenceHours}h\n(Totali ${totals.assigned}h - Distanza ${totals.distanceAssigned}h)`
+            },
+            { 
+                label: 'Sezioni complete', 
+                value: `${totals.completedSections}/${totals.totalSections}`,
+                tooltip: totals.completedSections < totals.totalSections
+                    ? `${totals.totalSections - totals.completedSections} sezioni ancora da completare`
+                    : 'Tutte le sezioni sono complete!'
+            }
         ];
 
-        const breakdownCards = breakdown.map(({ level, stats }) => ({
-            label: level.name,
-            value: `${stats.assigned}/${stats.total} h`,
-            meta: stats.distanceCap > 0
-                ? `Distanza ${stats.distanceAssigned}/${stats.distanceCap} h`
-                : 'Distanza non prevista'
-        }));
+        const breakdownCards = breakdown.map(({ level, stats }) => {
+            const levelMissingDetails = [];
+            level.sections.forEach((section) => {
+                const remaining = this.sectionRemaining(section);
+                if (remaining > 0) {
+                    levelMissingDetails.push(`  • ${section.title}: ${remaining}h`);
+                }
+            });
+            
+            const levelTooltip = levelMissingDetails.length > 0
+                ? `Ore mancanti in ${level.name}:\n${levelMissingDetails.join('\n')}`
+                : `${level.name}: tutte le ore assegnate!`;
+
+            return {
+                label: level.name,
+                value: `${stats.assigned}/${stats.total} h`,
+                meta: stats.distanceCap > 0
+                    ? `Distanza ${stats.distanceAssigned}/${stats.distanceCap} h`
+                    : 'Distanza non prevista',
+                tooltip: levelTooltip
+            };
+        });
 
         summaryContent.innerHTML = `
             ${[...cards, ...breakdownCards].map((item) => `
-                <div class="summary-item">
+                <div class="summary-item" data-tooltip="${this.escapeHtml(item.tooltip || '')}">
                     <span>${item.label}</span>
                     <strong>${item.value}</strong>
                     ${item.meta ? `<small>${item.meta}</small>` : ''}
                 </div>
             `).join('')}
         `;
+
+        // Aggiungi event listeners per tooltip
+        summaryContent.querySelectorAll('.summary-item').forEach((item) => {
+            const tooltipText = item.getAttribute('data-tooltip');
+            if (!tooltipText) return;
+
+            item.addEventListener('mouseenter', (e) => {
+                this.showCustomTooltip(e.currentTarget, tooltipText);
+            });
+
+            item.addEventListener('mouseleave', () => {
+                this.hideCustomTooltip();
+            });
+        });
 
         summaryPanel.classList.remove('hidden');
 
@@ -3302,6 +3430,60 @@ class CurriculumPlanner {
             completionFlag.textContent = 'Distribuisci tutte le ore per completare il percorso.';
             completionFlag.classList.remove('show');
         }
+    }
+
+    showCustomTooltip(element, text) {
+        // Rimuovi tooltip esistente
+        this.hideCustomTooltip();
+
+        const tooltip = document.createElement('div');
+        tooltip.className = 'custom-tooltip';
+        tooltip.textContent = text;
+        document.body.appendChild(tooltip);
+
+        const rect = element.getBoundingClientRect();
+        const tooltipRect = tooltip.getBoundingClientRect();
+
+        // Posiziona il tooltip sopra l'elemento
+        let top = rect.top - tooltipRect.height - 10;
+        let left = rect.left + (rect.width / 2) - (tooltipRect.width / 2);
+
+        // Se esce dallo schermo in alto, mettilo sotto
+        if (top < 10) {
+            top = rect.bottom + 10;
+            tooltip.classList.add('bottom');
+        }
+
+        // Se esce a destra, allinealo a destra
+        if (left + tooltipRect.width > window.innerWidth - 10) {
+            left = window.innerWidth - tooltipRect.width - 10;
+        }
+
+        // Se esce a sinistra, allinealo a sinistra
+        if (left < 10) {
+            left = 10;
+        }
+
+        tooltip.style.top = `${top}px`;
+        tooltip.style.left = `${left}px`;
+
+        // Mostra tooltip con animazione
+        setTimeout(() => tooltip.classList.add('visible'), 10);
+
+        this.state.currentTooltip = tooltip;
+    }
+
+    hideCustomTooltip() {
+        if (this.state.currentTooltip) {
+            this.state.currentTooltip.remove();
+            this.state.currentTooltip = null;
+        }
+    }
+
+    escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
     showToast(message, type = 'info') {

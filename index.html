@@ -11,48 +11,103 @@
 </head>
 <body>
     <div class="app-shell">
-        <header class="hero">
-            <div class="hero__content">
-                <span class="hero__eyebrow">Piano formativo modulare</span>
+        <!-- Schermata iniziale -->
+        <div id="welcome-screen" class="welcome-screen">
+            <div class="welcome-box">
+                <span class="welcome-eyebrow">Piano formativo modulare</span>
                 <h1>Distribuisci le ore tra gli obiettivi di apprendimento</h1>
                 <p>
                     Scegli il percorso formativo e assegna le ore previste a ciascun descrittore.
                     Il sistema ti guida nel rispettare i vincoli orari di ogni voce.
                 </p>
-                <div class="level-picker" role="group" aria-label="Seleziona percorso">
-                    <button type="button" class="level-button" data-level="Alpha">Alpha</button>
-                    <button type="button" class="level-button" data-level="Primo">Primo</button>
-                    <button type="button" class="level-button" data-level="SecondoLivello">Secondo livello</button>
-                    <button type="button" class="level-button" data-level="Secondo">Secondo</button>
+                
+                <div class="level-sections">
+                    <div class="level-section">
+                        <h2>Primo Livello</h2>
+                        <div class="level-buttons">
+                            <button type="button" class="level-card" data-level="Alpha">
+                                <span class="level-icon">📚</span>
+                                <span class="level-name">Alpha</span>
+                            </button>
+                            <button type="button" class="level-card" data-level="Primo">
+                                <span class="level-icon">📖</span>
+                                <span class="level-name">Primo</span>
+                            </button>
+                            <button type="button" class="level-card" data-level="Secondo">
+                                <span class="level-icon">📝</span>
+                                <span class="level-name">Secondo</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="level-section">
+                        <h2>Secondo Livello</h2>
+                        <div class="level-buttons">
+                            <button type="button" class="level-card" data-level="SecondoLivello">
+                                <span class="level-icon">🎓</span>
+                                <span class="level-name">AFM</span>
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="hero__illustration" aria-hidden="true">
-                <div class="glow"></div>
-                <div class="planet"></div>
-                <div class="orbit orbit--one"></div>
-                <div class="orbit orbit--two"></div>
-            </div>
-        </header>
+        </div>
 
-        <main class="layout">
-            <section id="details-panel" class="details-panel" aria-live="polite">
-                <div class="empty-state">
-                    <h2>Seleziona un percorso per iniziare</h2>
-                    <p>Scegli <strong>Alpha</strong>, <strong>Primo</strong>, <strong>Secondo livello</strong> o <strong>Secondo</strong> per visualizzare i moduli disponibili.</p>
-                </div>
-            </section>
-
-            <aside id="summary-panel" class="summary-panel hidden" aria-live="polite">
-                <h2>Riepilogo</h2>
-                <div id="summary-content" class="summary-grid"></div>
-            </aside>
-        </main>
-
-        <footer class="app-footer">
-            <button type="button" id="print-plan" class="btn-primary" disabled aria-disabled="true">
-                Esporta PDF
+        <!-- Contenuto principale (nascosto inizialmente) -->
+        <div id="main-content" class="main-content hidden">
+            <button type="button" id="back-to-welcome" class="back-button" title="Torna alla selezione">
+                ← Indietro
             </button>
-        </footer>
+            
+            <header class="hero">
+                <div class="hero__content">
+                    <span class="hero__eyebrow">Piano formativo modulare</span>
+                    <h1>Distribuisci le ore tra gli obiettivi di apprendimento</h1>
+                    <p>
+                        Scegli il percorso formativo e assegna le ore previste a ciascun descrittore.
+                        Il sistema ti guida nel rispettare i vincoli orari di ogni voce.
+                    </p>
+                    
+                    <!-- Bottoni Primo Livello -->
+                    <div id="primo-livello-picker" class="level-picker hidden" role="group" aria-label="Seleziona percorso Primo Livello">
+                        <button type="button" class="level-button" data-level="Alpha">Alpha</button>
+                        <button type="button" class="level-button" data-level="Primo">Primo</button>
+                        <button type="button" class="level-button" data-level="Secondo">Secondo</button>
+                    </div>
+                    
+                    <!-- Bottoni Secondo Livello -->
+                    <div id="secondo-livello-picker" class="level-picker hidden" role="group" aria-label="Seleziona percorso Secondo Livello">
+                        <button type="button" class="level-button" data-level="SecondoLivello">AFM</button>
+                    </div>
+                </div>
+                <div class="hero__illustration" aria-hidden="true">
+                    <div class="glow"></div>
+                    <div class="planet"></div>
+                    <div class="orbit orbit--one"></div>
+                    <div class="orbit orbit--two"></div>
+                </div>
+            </header>
+
+            <main class="layout">
+                <section id="details-panel" class="details-panel" aria-live="polite">
+                    <div class="empty-state">
+                        <h2>Seleziona un percorso per iniziare</h2>
+                        <p>Scegli <strong>Alpha</strong>, <strong>Primo</strong>, <strong>Secondo</strong> o <strong>AFM</strong> per visualizzare i moduli disponibili.</p>
+                    </div>
+                </section>
+
+                <aside id="summary-panel" class="summary-panel hidden" aria-live="polite">
+                    <h2>Riepilogo</h2>
+                    <div id="summary-content" class="summary-grid"></div>
+                    <button type="button" id="print-plan" class="btn-primary" disabled aria-disabled="true">
+                        Stampa PDF
+                    </button>
+                </aside>
+            </main>
+
+            <footer class="app-footer">
+            </footer>
+        </div>
     </div>
 
     <div id="toast" class="toast" role="alert" aria-hidden="true"></div>
