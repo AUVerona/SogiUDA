@@ -2073,7 +2073,7 @@ body {
     
     /* Summary panel extra small */
     .summary-panel {
-        padding: 12px 10px;
+        padding: 12px 0;
         border-radius: 0;
         margin: 0;
         width: 100%;
@@ -2084,11 +2084,30 @@ body {
         order: 1;
         padding: 0;
         border-radius: 0;
+        width: 100%;
+        max-width: 100vw;
+    }
+    
+    /* Section cards extra small - Full width */
+    .section {
+        padding: 0;
+        margin: 0;
+        width: 100%;
+        border-radius: 0;
+    }
+    
+    .section-card {
+        padding: 14px 10px;
+        border-radius: 0;
+        margin: 0 0 8px 0;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
     }
     
     /* Subtopics mobile */
     .subtopic {
-        padding: 16px 12px;
+        padding: 14px 10px;
         border-radius: 0;
         margin: 0 0 8px 0;
         width: 100%;
@@ -2818,7 +2837,7 @@ body {
     
     /* Sezioni/Livelli mobile - full width */
     .section {
-        padding: 12px 12px;
+        padding: 0;
         border-radius: 0;
         margin: 0;
         width: 100%;
@@ -2828,8 +2847,9 @@ body {
     
     .section-header {
         padding: 16px 12px;
-        border-radius: 12px;
-        margin: 0 0 12px 0;
+        border-radius: 0;
+        margin: 0;
+        width: 100%;
     }
     
     .section-title {
@@ -2837,6 +2857,39 @@ body {
     }
     
     .section-content {
+        padding: 0;
+        width: 100%;
+        margin: 0;
+    }
+    
+    .section-grid {
+        padding: 0;
+        margin: 0;
+        gap: 12px;
+        width: 100%;
+        max-width: 100vw;
+        display: flex;
+        flex-direction: column;
+    }
+    
+    /* Card sezioni (Ascolto, Parlato, etc.) - Full width */
+    .section-card {
+        padding: 16px 12px;
+        margin: 0 0 12px 0;
+        border-radius: 0;
+        width: 100%;
+        max-width: 100vw;
+        box-sizing: border-box;
+        border-left: 4px solid var(--accent);
+        border-right: 4px solid var(--accent);
+    }
+    
+    .section-card__top {
+        padding: 0;
+        width: 100%;
+    }
+    
+    .section-card__meta {
         padding: 0;
         width: 100%;
     }
@@ -3453,13 +3506,14 @@ body {
     /* Layout e details panel mobile - Full width */
     .layout {
         padding: 0;
-        gap: 12px;
+        gap: 0;
         width: 100%;
         max-width: 100vw;
+        box-sizing: border-box;
     }
     
     .details-panel {
-        padding: 12px;
+        padding: 0;
         border-radius: 0;
         margin: 0;
         width: 100%;
@@ -3474,5 +3528,13 @@ body {
         padding: 0;
         margin: 0;
         box-sizing: border-box;
+    }
+    
+    /* Altri elementi full-width */
+    .section-feedback,
+    .section-distance {
+        padding: 12px;
+        margin: 8px 0;
+        border-radius: 8px;
     }
 }
