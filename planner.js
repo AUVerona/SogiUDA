@@ -111,6 +111,13 @@ const curriculumModel = {
                                 distanceHours: 0
                             }
                         ]
+                    },
+                    {
+                        id: 'alpha-a1-incremento',
+                        title: 'Competenza di Incremento',
+                        totalHours: 200,
+                        isFacoltativa: true,
+                        subtopics: []
                     }
                 ]
             },
@@ -222,6 +229,13 @@ const curriculumModel = {
                                 distanceHours: 0
                             }
                         ]
+                    },
+                    {
+                        id: 'alpha-a2-incremento',
+                        title: 'Competenza di Incremento',
+                        totalHours: 200,
+                        isFacoltativa: true,
+                        subtopics: []
                     }
                 ]
             }
@@ -416,6 +430,13 @@ const curriculumModel = {
                                 distanceHours: 0
                             }
                         ]
+                    },
+                    {
+                        id: 'primo-incremento',
+                        title: 'Competenza di Incremento',
+                        totalHours: 200,
+                        isFacoltativa: true,
+                        subtopics: []
                     }
                 ]
             }
@@ -721,6 +742,13 @@ const curriculumModel = {
                                 distanceHours: 0
                             }
                         ]
+                    },
+                    {
+                        id: 'secondo-incremento',
+                        title: 'Competenza di Incremento',
+                        totalHours: 200,
+                        isFacoltativa: true,
+                        subtopics: []
                     }
                 ]
             }
@@ -1181,8 +1209,8 @@ class CurriculumPlanner {
     }
 
     renderAddUDAButton(section) {
-        // Mostra il pulsante UDA solo nel SecondoLivello
-        if (this.state.selectedLevel !== 'SecondoLivello') {
+        // Mostra il pulsante UDA per SecondoLivello O per sezioni facoltative
+        if (this.state.selectedLevel !== 'SecondoLivello' && !section.isFacoltativa) {
             return '';
         }
 
@@ -1238,7 +1266,7 @@ class CurriculumPlanner {
                         ${subtopic.hours > 0 ? `<span class="subtopic-hours">${subtopic.hours} h totali</span>` : ''}
                         ${(subtopic.distanceHours || 0) > 0 ? `<span class="subtopic-distance-tag">${subtopic.distanceHours} h distanza</span>` : ''}
                     </div>
-                    ${this.state.selectedLevel === 'SecondoLivello' ? `
+                    ${this.state.selectedLevel === 'SecondoLivello' || section.isFacoltativa ? `
                         <div class="subtopic-actions">
                             <button type="button" class="edit-uda-button" data-section-id="${section.id}" data-subtopic-id="${subtopic.id}" title="Modifica UDA">
                                 <span class="edit-icon">✏️</span>
@@ -2194,8 +2222,8 @@ class CurriculumPlanner {
         // Aggiungi alla sezione
         section.subtopics.push(newUDA);
 
-        // Per il SecondoLivello, ricarica completamente la visualizzazione
-        if (this.state.selectedLevel === 'SecondoLivello') {
+        // Per il SecondoLivello o sezioni facoltative, ricarica completamente la visualizzazione
+        if (this.state.selectedLevel === 'SecondoLivello' || section.isFacoltativa) {
             this.renderDetails();
         } else {
             this.refreshSection(sectionId);
@@ -2330,7 +2358,7 @@ class CurriculumPlanner {
         section.subtopics.splice(subtopicIndex, 1);
 
         // Ricarica la visualizzazione
-        if (this.state.selectedLevel === 'SecondoLivello') {
+        if (this.state.selectedLevel === 'SecondoLivello' || section.isFacoltativa) {
             this.renderDetails();
         } else {
             this.refreshSection(sectionId);
@@ -2536,7 +2564,7 @@ class CurriculumPlanner {
         subtopic.distanceHours = sanitizedDistance;
 
         // Ricarica la visualizzazione
-        if (this.state.selectedLevel === 'SecondoLivello') {
+        if (this.state.selectedLevel === 'SecondoLivello' || section.isFacoltativa) {
             this.renderDetails();
         } else {
             this.refreshSection(sectionId);
@@ -3151,6 +3179,11 @@ class CurriculumPlanner {
         }
 
         return level.sections.reduce((acc, section) => {
+            // Salta le sezioni facoltative dal conteggio
+            if (section.isFacoltativa) {
+                return acc;
+            }
+            
             const allocated = this.sectionAllocated(section);
             const remaining = this.sectionRemaining(section);
             const distanceAllocated = this.sectionDistanceAllocated(section);

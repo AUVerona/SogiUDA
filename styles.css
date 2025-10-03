@@ -456,6 +456,20 @@ body {
     color: var(--text-secondary);
 }
 
+.empty-uda-state {
+    padding: 20px;
+    text-align: center;
+    background: rgba(5, 150, 105, 0.05);
+    border-radius: 12px;
+    border: 2px dashed rgba(5, 150, 105, 0.3);
+}
+
+.empty-uda-state p {
+    margin: 0;
+    color: var(--tertiary);
+    font-size: 0.95rem;
+}
+
 .level-block {
     background: var(--surface);
     padding: clamp(24px, 4vw, 36px);
@@ -537,6 +551,11 @@ body {
     padding: 6px 14px;
     font-size: 0.85rem;
     font-weight: 600;
+}
+
+.capsule-optional {
+    background: rgba(5, 150, 105, 0.1);
+    color: var(--tertiary);
 }
 
 .progress {
