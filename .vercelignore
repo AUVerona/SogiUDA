@@ -1,11 +1,9 @@
 # .vercelignore
 # Files and folders to exclude from Vercel deployment
 
-materie_esempio.csv
-index.html
-planner.js
-README.md
-DEPLOY-VERCEL.md
-vercel.json
+# materie_esempio.csv
+# README.md
+# DEPLOY-VERCEL.md
+# vercel.json
 # Escludi tutto tranne sogi-gestionale per deploy pulito
 !sogi-gestionale/**
