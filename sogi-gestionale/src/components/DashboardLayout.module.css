@@ -1,0 +1,259 @@
+.dashboardContainer {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Topbar */
+.topbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 70px;
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 24px;
+  z-index: 100;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+.topbarLeft {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.menuToggle {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.menuToggle:hover {
+  background: #f7fafc;
+}
+
+.menuToggle span {
+  display: block;
+  width: 24px;
+  height: 2px;
+  background: #4a5568;
+  border-radius: 2px;
+  transition: all 0.3s;
+}
+
+.logo {
+  font-size: 24px;
+  font-weight: 700;
+  background: linear-gradient(135deg, #0066cc 0%, #004499 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0;
+}
+
+.topbarRight {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.userInfo {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.userDetails {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.userName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+}
+
+.userRole {
+  font-size: 12px;
+  color: #718096;
+}
+
+.logoutButton {
+  padding: 8px 20px;
+  background: #e53e3e;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.logoutButton:hover {
+  background: #c53030;
+  transform: translateY(-1px);
+}
+
+/* Sidebar */
+.sidebar {
+  position: fixed;
+  left: 0;
+  top: 70px;
+  bottom: 0;
+  background: white;
+  border-right: 1px solid #e2e8f0;
+  transition: width 0.3s ease;
+  overflow: hidden;
+  z-index: 50;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+}
+
+.sidebarOpen {
+  width: 280px;
+}
+
+.sidebarClosed {
+  width: 80px;
+}
+
+.sidebarNav {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 24px 0;
+}
+
+.schoolInfo {
+  display: flex;
+  flex-direction: column;
+  padding: 0 24px 24px;
+  border-bottom: 1px solid #e2e8f0;
+  margin-bottom: 24px;
+}
+
+.schoolLabel {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: #a0aec0;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.schoolName {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2d3748;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sidebarClosed .schoolInfo {
+  display: none;
+}
+
+.menuList {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.menuItem {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 24px;
+  color: #4a5568;
+  transition: all 0.2s;
+  border-left: 3px solid transparent;
+  cursor: pointer;
+}
+
+.menuItem:hover {
+  background: #f7fafc;
+  color: #0066cc;
+}
+
+.menuItemActive {
+  background: linear-gradient(90deg, rgba(0, 102, 204, 0.1) 0%, rgba(0, 102, 204, 0.05) 100%);
+  color: #0066cc;
+  border-left-color: #0066cc;
+  font-weight: 600;
+}
+
+.menuIcon {
+  font-size: 20px;
+  min-width: 20px;
+  text-align: center;
+}
+
+.menuText {
+  font-size: 15px;
+  white-space: nowrap;
+}
+
+.sidebarClosed .menuText {
+  display: none;
+}
+
+/* Main Content */
+.mainContent {
+  margin-top: 70px;
+  transition: margin-left 0.3s ease;
+  min-height: calc(100vh - 70px);
+  background: #f7fafc;
+  padding: 32px;
+  overflow-y: auto;
+}
+
+.mainContentWithSidebar {
+  margin-left: 280px;
+}
+
+.mainContentFull {
+  margin-left: 80px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .topbar {
+    padding: 0 16px;
+  }
+
+  .logo {
+    font-size: 20px;
+  }
+
+  .userDetails {
+    display: none;
+  }
+
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebarOpen {
+    transform: translateX(0);
+    width: 280px;
+  }
+
+  .mainContent {
+    margin-left: 0 !important;
+  }
+}

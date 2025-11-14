@@ -1,0 +1,296 @@
+
+/* --- ADMIN PANEL DARK & MODERN --- */
+.adminRoot {
+	display: flex;
+	min-height: 100vh;
+	background: #181c24;
+	color: #f3f4f6;
+}
+
+.sidebarAdmin {
+	width: 220px;
+	background: #232837;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	padding: 32px 0 0 0;
+	box-shadow: 2px 0 16px 0 #0002;
+	position: relative;
+}
+.adminBadge {
+	background: #e11d48;
+	color: #fff;
+	font-weight: bold;
+	padding: 6px 18px;
+	border-radius: 20px;
+	margin-bottom: 32px;
+	letter-spacing: 2px;
+	font-size: 1.1em;
+	box-shadow: 0 2px 8px #e11d4822;
+}
+.sidebarAdmin nav ul {
+	list-style: none;
+	padding: 0;
+	width: 100%;
+}
+.sidebarAdmin nav li {
+	margin-bottom: 12px;
+}
+.sidebarAdmin button {
+	width: 100%;
+	background: none;
+	border: none;
+	color: #f3f4f6;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	font-size: 1.08em;
+	padding: 12px 24px;
+	border-radius: 8px 0 0 8px;
+	cursor: pointer;
+	transition: background 0.18s;
+}
+.activeTab {
+	background: linear-gradient(90deg, #e11d48 0%, #232837 100%);
+	color: #fff;
+	font-weight: bold;
+	box-shadow: 2px 0 8px #e11d4822;
+}
+
+.adminMainPanel {
+	flex: 1;
+	padding: 0 0 0 0;
+	display: flex;
+	flex-direction: column;
+}
+.adminHeaderSticky {
+	position: sticky;
+	top: 0;
+	z-index: 10;
+	background: #232837;
+	padding: 28px 40px 18px 40px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	border-bottom: 1.5px solid #2d3344;
+	box-shadow: 0 2px 12px #0002;
+}
+.adminTitle {
+	font-size: 2.1em;
+	font-weight: 700;
+	letter-spacing: 1px;
+	color: #e11d48;
+}
+.adminSearch {
+	background: #181c24;
+	border: 1.5px solid #2d3344;
+	color: #f3f4f6;
+	border-radius: 8px;
+	padding: 10px 18px;
+	font-size: 1em;
+	width: 260px;
+	outline: none;
+	transition: border 0.18s;
+}
+.adminSearch:focus {
+	border-color: #e11d48;
+}
+
+.adminSection {
+	padding: 36px 40px 0 40px;
+}
+.adminSectionTitle {
+	font-size: 1.3em;
+	color: #f3f4f6;
+	margin-bottom: 18px;
+	letter-spacing: 0.5px;
+}
+.adminCardGrid {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+	gap: 28px;
+}
+.adminCard {
+	background: #232837;
+	border-radius: 16px;
+	box-shadow: 0 4px 24px #0004;
+	padding: 24px 22px 18px 22px;
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+	transition: box-shadow 0.18s, transform 0.18s;
+	border: 1.5px solid #2d3344;
+}
+.adminCard:hover {
+	box-shadow: 0 8px 32px #e11d4840;
+	transform: translateY(-2px) scale(1.01);
+}
+.adminCardHeader {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	margin-bottom: 8px;
+}
+.adminCardTitle {
+	font-size: 1.15em;
+	color: #e11d48;
+	font-weight: 600;
+}
+.adminBadgeSmall {
+	background: #e11d48;
+	color: #fff;
+	font-size: 0.85em;
+	padding: 2px 10px;
+	border-radius: 12px;
+	margin-left: 8px;
+	font-weight: 500;
+}
+.adminCardMeta {
+	font-size: 0.98em;
+	color: #f3f4f6bb;
+}
+.adminCardBody {
+	margin-bottom: 8px;
+}
+.adminInfoRow {
+	display: flex;
+	justify-content: space-between;
+	font-size: 0.98em;
+	margin-bottom: 2px;
+}
+.adminCardFooter {
+	display: flex;
+	justify-content: flex-end;
+}
+.adminActionBtn {
+	background: #e11d48;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	padding: 7px 18px;
+	font-size: 1em;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.18s;
+	box-shadow: 0 2px 8px #e11d4822;
+}
+.adminActionBtn:hover {
+	background: #be123c;
+}
+
+.adminTableWrapper {
+	overflow-x: auto;
+	background: #232837;
+	border-radius: 12px;
+	box-shadow: 0 2px 12px #0002;
+	border: 1.5px solid #2d3344;
+}
+.adminTable {
+	width: 100%;
+	border-collapse: collapse;
+	color: #f3f4f6;
+}
+.adminTable th, .adminTable td {
+	border: 1px solid #2d3344;
+	padding: 10px 12px;
+}
+.adminTable th {
+	background: #232837;
+	color: #e11d48;
+	font-weight: 600;
+}
+.adminTable tr:nth-child(even) {
+	background: #1a1e27;
+}
+.adminRestoreBtn {
+	background: #22c55e;
+	color: #fff;
+	border: none;
+	border-radius: 8px;
+	padding: 6px 14px;
+	font-size: 1em;
+	font-weight: 500;
+	cursor: pointer;
+	transition: background 0.18s;
+	box-shadow: 0 2px 8px #22c55e22;
+}
+.adminRestoreBtn:hover {
+	background: #15803d;
+}
+
+.emptyStateAdmin {
+	color: #e11d48;
+	background: #232837;
+	border-radius: 12px;
+	padding: 32px;
+	text-align: center;
+	font-size: 1.1em;
+	margin: 32px 0;
+	box-shadow: 0 2px 12px #e11d4822;
+}
+
+/* --- MODAL --- */
+.adminModalOverlay {
+	position: fixed;
+	top: 0; left: 0; right: 0; bottom: 0;
+	background: rgba(24,28,36,0.92);
+	z-index: 1000;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.adminModalContent {
+	background: #232837;
+	border-radius: 18px;
+	box-shadow: 0 8px 40px #e11d4840;
+	padding: 36px 32px 28px 32px;
+	min-width: 340px;
+	max-width: 600px;
+	border: 2.5px solid #e11d48;
+	position: relative;
+}
+.adminModalClose {
+	position: absolute;
+	top: 18px;
+	right: 18px;
+	background: none;
+	border: none;
+	color: #e11d48;
+	font-size: 2em;
+	cursor: pointer;
+}
+.adminModalTitle {
+	color: #e11d48;
+	font-size: 1.3em;
+	margin-bottom: 10px;
+}
+.adminModalMeta {
+	color: #f3f4f6cc;
+	font-size: 1em;
+	margin-bottom: 18px;
+}
+.adminModalSection {
+	margin-bottom: 18px;
+}
+.adminModalSectionTitle {
+	color: #e11d48;
+	font-size: 1.08em;
+	margin-bottom: 6px;
+}
+.adminModalTable {
+	width: 100%;
+	border-collapse: collapse;
+	color: #f3f4f6;
+}
+.adminModalTable th, .adminModalTable td {
+	border: 1px solid #2d3344;
+	padding: 8px 10px;
+}
+.adminModalTable th {
+	background: #232837;
+	color: #e11d48;
+	font-weight: 600;
+}
+.adminModalTable tr:nth-child(even) {
+	background: #1a1e27;
+}
