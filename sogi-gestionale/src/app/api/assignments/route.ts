@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
+import { authOptions } from '@/lib/auth';
 import dbConnect from '@/lib/mongodb';
 import Assignment from '@/models/Assignment';
-import { authOptions } from '../auth/[...nextauth]/route';
 
 export async function POST(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = (await getServerSession(authOptions as any)) as any;
 
     if (!session) {
       return NextResponse.json(
@@ -53,7 +53,7 @@ export async function POST(req: NextRequest) {
 
 export async function GET(req: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = (await getServerSession(authOptions as any)) as any;
 
     if (!session) {
       return NextResponse.json(
