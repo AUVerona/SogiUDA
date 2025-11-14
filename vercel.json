@@ -1,9 +1,1 @@
-{
-  "version": 2,
-  "builds": [
-    { "src": "sogi-gestionale/next.config.js", "use": "@vercel/next" }
-  ],
-  "routes": [
-    { "src": "/(.*)", "dest": "/sogi-gestionale/$1" }
-  ]
-}
+
