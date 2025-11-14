@@ -1,9 +1,7 @@
-# .vercelignore
-# Files and folders to exclude from Vercel deployment
+﻿# Exclude everything by default, then include the sogi-gestionale folder
+# so Vercel only deploys that subfolder of the repo. This is useful for
+# monorepos or when the project you want to deploy is not at the repo root.
 
-# materie_esempio.csv
-# README.md
-# DEPLOY-VERCEL.md
-# vercel.json
-# Escludi tutto tranne sogi-gestionale per deploy pulito
+*
 !sogi-gestionale/**
+!.vercelignore
