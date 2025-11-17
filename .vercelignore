@@ -1,7 +1,0 @@
-﻿# Exclude everything by default, then include the sogi-gestionale folder
-# so Vercel only deploys that subfolder of the repo. This is useful for
-# monorepos or when the project you want to deploy is not at the repo root.
-
-*
-!sogi-gestionale/**
-!.vercelignore
