@@ -22,7 +22,7 @@ const curriculumModel = {
                             {
                                 id: 'alpha-a1-ascolto-2',
                                 code: '2',
-                                label: 'Comprendere un discorso pronunciato molto lentamente e articolato con grande precisione, che contenga lunghe pause per permettere di assimilarne il senso.',
+                                label: 'ComprenderE un discorso pronunciato molto lentamente e articolato con grande precisione, che contenga lunghe pause per permettere di assimilarne il senso.',
                                 hours: 0,
                                 distanceHours: 0
                             }
