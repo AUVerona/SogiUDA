@@ -888,7 +888,7 @@ function AssegnazioneDetails({ level, onBack, editId, customSections, customTitl
 
     // Salva su DB
     const handleSaveAFM = async () => {
-      // Validazione: tutte le ore devono essere assegnate
+      // Permetti il salvataggio anche se non tutte le ore sono assegnate, ma mostra warning
       let allHoursUsed = true;
       let materieConOreMancanti: string[] = [];
       materie.forEach(m => {
@@ -898,13 +898,6 @@ function AssegnazioneDetails({ level, onBack, editId, customSections, customTitl
           materieConOreMancanti.push(`${m.nome} (mancano ${m.ore - used} ore)`);
         }
       });
-      if (!allHoursUsed) {
-        showNotification(
-          `Devi utilizzare tutte le ore disponibili.\n\nMaterie con ore non ancora assegnate:\n- ${materieConOreMancanti.join('\n- ')}`,
-          'warning'
-        );
-        return;
-      }
       // Mappa i dati come richiesto dal backend
       const assegnazioni = materie.map(m => ({
         sectionId: m.id,
@@ -931,7 +924,14 @@ function AssegnazioneDetails({ level, onBack, editId, customSections, customTitl
         const data = await response.json();
         if (response.ok) {
           setIsSaved(true);
-          showNotification('Assegnazione salvata con successo!', 'success');
+          if (!allHoursUsed) {
+            showNotification(
+              `Attenzione: non tutte le ore sono state assegnate.\n\nMaterie con ore non ancora assegnate:\n- ${materieConOreMancanti.join('\n- ')}\n\nAssegnazione salvata comunque!`,
+              'warning'
+            );
+          } else {
+            showNotification('Assegnazione salvata con successo!', 'success');
+          }
         } else {
           showNotification('Errore nel salvataggio: ' + (data.error || 'Errore sconosciuto'), 'error');
         }
@@ -1015,10 +1015,15 @@ function AssegnazioneDetails({ level, onBack, editId, customSections, customTitl
                               <button
                                 style={{marginLeft:8,background:'#fff',border:'1px solid #e53e3e',color:'#e53e3e',borderRadius:4,padding:'2px 8px',fontSize:13,cursor:'pointer'}}
                                 title="Elimina UDA"
-                                onClick={() => setMaterie(materie.map(m => m.id === mat.id ? {
-                                  ...m,
-                                  uda: m.uda.filter((u, i) => i !== idx)
-                                } : m))}
+                                onClick={() => {
+                                  setMaterie(prev => prev.map(m => {
+                                    if (m.id !== mat.id) return m;
+                                    return {
+                                      ...m,
+                                      uda: m.uda.filter((u, i) => i !== idx)
+                                    };
+                                  }));
+                                }}
                               >Elimina</button>
                             </td>
                             <td className={styles.oreCell}>

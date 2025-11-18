@@ -66,6 +66,7 @@ export async function GET(req: NextRequest) {
 
     const assignments = await Assignment.find({
       createdBy: session.user.id,
+      deleted: { $ne: true }
     })
       .sort({ createdAt: -1 })
       .limit(50);

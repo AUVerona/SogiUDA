@@ -47,6 +47,8 @@ export default function StoricoPage() {
   };
 
   const filteredAssignments = assignments.filter((assignment) => {
+    // Mostra solo assegnazioni non eliminate (robusto: undefined o false = visibile)
+    if (typeof assignment.deleted !== 'undefined' && assignment.deleted) return false;
     if (filter.livello && assignment.livello !== filter.livello) {
       return false;
     }
