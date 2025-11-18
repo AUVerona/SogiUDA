@@ -27,8 +27,12 @@ export default function AssegnazionePage() {
   const searchParams = useSearchParams();
   const editId = searchParams.get('edit');
   
-  const [step, setStep] = useState<'main' | 'primo-livello' | 'secondo-livello' | 'details'>('main');
+  const [step, setStep] = useState<'main' | 'primo-livello' | 'secondo-livello' | 'indirizzo' | 'voce' | 'periodo' | 'classe' | 'details'>('main');
   const [selectedLevel, setSelectedLevel] = useState<LevelType | null>(null);
+  const [selectedIndirizzo, setSelectedIndirizzo] = useState<string | null>(null);
+  const [selectedVoce, setSelectedVoce] = useState<string | null>(null);
+  const [selectedPeriodo, setSelectedPeriodo] = useState<string | null>(null);
+  const [selectedClasse, setSelectedClasse] = useState<string | null>(null);
   const [isLoadingEdit, setIsLoadingEdit] = useState(false);
 
   // Carica assegnazione da modificare se c'è l'ID nei parametri
@@ -78,24 +82,68 @@ export default function AssegnazionePage() {
     setStep('details');
   };
 
+  // Stepper per Secondo Livello
   const handleSecondoLivelloSelect = (indirizzo: string) => {
-    setSelectedLevel('SecondoLivello'); // Per ora uso questo, poi aggiungeremo le sottovoci
+    setSelectedLevel('SecondoLivello');
+    setSelectedIndirizzo(indirizzo);
+    setStep('voce');
+  };
+
+  const handleVoceSelect = (voce: string) => {
+    setSelectedVoce(voce);
+    setStep('periodo');
+  };
+
+  const handlePeriodoSelect = (periodo: string) => {
+    setSelectedPeriodo(periodo);
+    setStep('classe');
+  };
+
+  const handleClasseSelect = (classe: string) => {
+    setSelectedClasse(classe);
     setStep('details');
   };
 
   const handleBack = () => {
     if (step === 'details') {
-      // Torna alla schermata precedente in base al livello selezionato
       if (selectedLevel === 'Alpha') {
         setStep('main');
+        setSelectedLevel(null);
       } else if (selectedLevel === 'Primo' || selectedLevel === 'Secondo') {
         setStep('primo-livello');
-      } else {
-        setStep('secondo-livello');
+        setSelectedLevel(null);
+      } else if (selectedLevel === 'SecondoLivello') {
+        if (selectedClasse) {
+          setStep('classe');
+          setSelectedClasse(null);
+        } else if (selectedPeriodo) {
+          setStep('periodo');
+          setSelectedPeriodo(null);
+        } else if (selectedVoce) {
+          setStep('voce');
+          setSelectedVoce(null);
+        } else if (selectedIndirizzo) {
+          setStep('indirizzo');
+          setSelectedIndirizzo(null);
+        } else {
+          setStep('secondo-livello');
+        }
       }
+    } else if (step === 'classe') {
+      setStep('periodo');
+      setSelectedClasse(null);
+    } else if (step === 'periodo') {
+      setStep('voce');
+      setSelectedPeriodo(null);
+    } else if (step === 'voce') {
+      setStep('secondo-livello');
+      setSelectedVoce(null);
+    } else if (step === 'secondo-livello') {
+      setStep('main');
       setSelectedLevel(null);
     } else {
       setStep('main');
+      setSelectedLevel(null);
     }
   };
 
@@ -194,7 +242,7 @@ export default function AssegnazionePage() {
         </div>
       )}
 
-      {/* Schermata Secondo Livello - Scelta tra Tecnico, Professionale, Artistico, Liceale */}
+      {/* Schermata Secondo Livello - Scelta tra indirizzi */}
       {step === 'secondo-livello' && (
         <div className={styles.welcomeScreen}>
           <div className={styles.welcomeBox}>
@@ -204,50 +252,126 @@ export default function AssegnazionePage() {
             <h1>Secondo Livello</h1>
             <p>Seleziona l'indirizzo</p>
           </div>
-
           <div className={styles.levelSelectionGrid}>
-            <button
-              type="button"
-              className={styles.levelCard}
-              onClick={() => handleSecondoLivelloSelect('tecnico')}
-            >
-              <div className={styles.levelCardIcon}>T</div>
-              <h2 className={styles.levelCardTitle}>Tecnico</h2>
-              <p className={styles.levelCardDescription}>
-                AFM, SIA, Turismo, etc.
-              </p>
-            </button>
+            {curriculumModel.SecondoLivello.indirizzi && Object.entries(curriculumModel.SecondoLivello.indirizzi).map(([indirizzoKey, indirizzo]) => (
+              <button
+                key={indirizzoKey}
+                type="button"
+                className={styles.levelCard}
+                onClick={() => handleSecondoLivelloSelect(indirizzoKey)}
+              >
+                <div className={styles.levelCardIcon}>{indirizzoKey.charAt(0).toUpperCase()}</div>
+                <h2 className={styles.levelCardTitle}>{indirizzo.name}</h2>
+                <p className={styles.levelCardDescription}>
+                  {indirizzo.voci ? Object.keys(indirizzo.voci).join(', ').toUpperCase() : ''}
+                </p>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
-            <button
-              type="button"
-              className={styles.levelCard}
-              onClick={() => handleSecondoLivelloSelect('professionale')}
-            >
-              <div className={styles.levelCardIcon}>P</div>
-              <h2 className={styles.levelCardTitle}>Professionale</h2>
-              <p className={styles.levelCardDescription}>
-                Indirizzi professionali
-              </p>
+      {/* Schermata Voce (es. AFM) */}
+      {step === 'voce' && selectedIndirizzo && (
+        <div className={styles.welcomeScreen}>
+          <div className={styles.welcomeBox}>
+            <button type="button" className={styles.backButton} onClick={handleBack}>
+              ← Indietro
             </button>
+            <h1>{curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].name}</h1>
+            <p>Seleziona la voce</p>
+          </div>
+          <div className={styles.levelSelectionGrid}>
+            {Object.entries(curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].voci).map(([voceKey, voce]) => (
+              <button
+                key={voceKey}
+                type="button"
+                className={styles.levelCard}
+                onClick={() => handleVoceSelect(voceKey)}
+              >
+                <div className={styles.levelCardIcon}>{voceKey.toUpperCase()}</div>
+                <h2 className={styles.levelCardTitle}>{(voce as any).name}</h2>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
 
-            <button
-              type="button"
-              className={styles.levelCard}
-              onClick={() => handleSecondoLivelloSelect('artistico')}
-            >
-              <div className={styles.levelCardIcon}>A</div>
-              <h2 className={styles.levelCardTitle}>Artistico</h2>
-              <p className={styles.levelCardDescription}>
-                Liceo artistico
-              </p>
+      {/* Schermata Periodo Didattico */}
+      {step === 'periodo' && selectedIndirizzo && selectedVoce && (
+        <div className={styles.welcomeScreen}>
+          <div className={styles.welcomeBox}>
+            <button type="button" className={styles.backButton} onClick={handleBack}>
+              ← Indietro
             </button>
+            <h1>{curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].voci[selectedVoce].name}</h1>
+            <p>Seleziona il periodo didattico</p>
+          </div>
+          <div className={styles.levelSelectionGrid}>
+            {Object.entries(curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].voci[selectedVoce].periods).map(([periodoKey, periodo]) => (
+              <button
+                key={periodoKey}
+                type="button"
+                className={styles.levelCard}
+                onClick={() => handlePeriodoSelect(periodoKey)}
+              >
+                <div className={styles.levelCardIcon}>{periodoKey.charAt(0).toUpperCase()}</div>
+                <h2 className={styles.levelCardTitle}>{(periodo as any).name}</h2>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Schermata Classe */}
+      {step === 'classe' && selectedIndirizzo && selectedVoce && selectedPeriodo && (
+        <div className={styles.welcomeScreen}>
+          <div className={styles.welcomeBox}>
+            <button type="button" className={styles.backButton} onClick={handleBack}>
+              ← Indietro
+            </button>
+            <h1>{curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].voci[selectedVoce].periods[selectedPeriodo].name}</h1>
+            <p>Seleziona la classe</p>
+          </div>
+          <div className={styles.levelSelectionGrid}>
+            {curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].voci[selectedVoce].periods[selectedPeriodo].classes &&
+              Object.entries(curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].voci[selectedVoce].periods[selectedPeriodo].classes).map(([classeKey, classe]) => (
+                <button
+                  key={classeKey}
+                  type="button"
+                  className={styles.levelCard}
+                  onClick={() => handleClasseSelect(classeKey)}
+                >
+                  <div className={styles.levelCardIcon}>{(classe as any).name}</div>
+                  <h2 className={styles.levelCardTitle}>{(classe as any).name}</h2>
+                </button>
+              ))}
           </div>
         </div>
       )}
 
       {step === 'details' && selectedLevel && (
         <div className={styles.detailsScreen}>
-          <AssegnazioneDetails level={selectedLevel} onBack={handleBack} editId={editId} />
+          {/* Per SecondoLivello custom, passa i dati della classe selezionata */}
+          {selectedLevel === 'SecondoLivello' && selectedIndirizzo && selectedVoce && selectedPeriodo && selectedClasse ? (
+            <AssegnazioneDetails
+              level={selectedLevel}
+              onBack={handleBack}
+              editId={editId}
+              customSections={
+                curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].voci[selectedVoce].periods[selectedPeriodo].classes
+                  ? curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].voci[selectedVoce].periods[selectedPeriodo].classes[selectedClasse].sections
+                  : []
+              }
+              customTitle={
+                curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].voci[selectedVoce].periods[selectedPeriodo].classes
+                  ? curriculumModel.SecondoLivello.indirizzi[selectedIndirizzo].voci[selectedVoce].periods[selectedPeriodo].classes[selectedClasse].name
+                  : ''
+              }
+            />
+          ) : (
+            <AssegnazioneDetails level={selectedLevel} onBack={handleBack} editId={editId} />
+          )}
         </div>
       )}
     </div>
@@ -267,11 +391,19 @@ interface CustomCompetenza {
   distanceHours: number;
 }
 
-function AssegnazioneDetails({ level, onBack, editId }: AssegnazioneDetailsProps) {
+// customSections e customTitle sono opzionali e usati per SecondoLivello custom
+function AssegnazioneDetails({ level, onBack, editId, customSections, customTitle }: AssegnazioneDetailsProps & { customSections?: any[]; customTitle?: string }) {
   const curriculum = (curriculumModel as any)[level];
-  
+
   // Funzione per inizializzare i dati con 1h minima per ogni subtopic
   const loadCurriculum = () => {
+    if (customSections) {
+      // Per SecondoLivello custom, usa direttamente le sezioni passate
+      return { sections: JSON.parse(JSON.stringify(customSections)) };
+    }
+    if (!curriculum || !curriculum.levels || !Array.isArray(curriculum.levels) || !curriculum.levels[0]) {
+      return null;
+    }
     const data = JSON.parse(JSON.stringify(curriculum.levels[0]));
     // Imposta 1h come minimo per ogni subtopic
     data.sections.forEach((section: any) => {
@@ -690,6 +822,304 @@ function AssegnazioneDetails({ level, onBack, editId }: AssegnazioneDetailsProps
     }
   };
 
+  // Se la struttura non è supportata (es. SecondoLivello custom), mostra placeholder
+  // Se non ci sono dati, mostra una tabella vuota con intestazioni e un messaggio
+  // Stato locale per materie e UDA (solo fallback demo)
+
+  // Stato materie AFM stile competenze incremento
+    const [materie, setMaterie] = React.useState([
+      { id: 'mat-ita', nome: 'Lingua e letteratura italiana', ore: 99, distanza: 0, uda: [] },
+      { id: 'mat-ing', nome: 'Lingua Inglese', ore: 66, distanza: 0, uda: [] },
+      { id: 'mat-sci', nome: 'Scienze integrate', ore: 99, distanza: 0, uda: [] },
+      { id: 'mat-mat', nome: 'Matematica', ore: 99, distanza: 0, uda: [] },
+    ]);
+
+    // Carica dati assegnazione se editId è presente (modifica)
+    React.useEffect(() => {
+      if (!editId) return;
+      // Carica dal backend
+      fetch(`/api/assignments/${editId}`)
+        .then(res => res.json())
+        .then(data => {
+          if (data && data.assignment && Array.isArray(data.assignment.assegnazioni)) {
+            // Mappa le assegnazioni su materie/uda
+            setMaterie(prevMaterie => prevMaterie.map(mat => {
+              const found = data.assignment.assegnazioni.find((a: any) => a.sectionId === mat.id);
+              if (!found) return { ...mat, uda: [] };
+              return {
+                ...mat,
+                uda: found.subtopics.map((u: any, idx: number) => ({
+                  id: u.id || `uda-${idx+1}`,
+                  nome: u.label,
+                  orePresenza: u.hours,
+                  oreDistanza: u.distanceHours
+                }))
+              };
+            }));
+          }
+        });
+    }, [editId]);
+  const [newUDA, setNewUDA] = React.useState({});
+  const [newMateria, setNewMateria] = React.useState('');
+  const [newOre, setNewOre] = React.useState('');
+  const [newDistanza, setNewDistanza] = React.useState('');
+  const MIN_HOURS = 1;
+  const MAX_HOURS = 99;
+
+  if ((!curriculum && !customSections) || !assignments || !assignments.sections || assignments.sections.length === 0) {
+    // Copia struttura Alpha: ogni materia = sezione, ogni UDA = subtopic
+    // Stato salvataggio e ore rimanenti demo
+    const [isSaved, setIsSaved] = React.useState(false);
+    const [notification, setNotification] = React.useState<{message: string, type: 'success' | 'error' | 'warning'} | null>(null);
+    const getTotalRemainingHours = () => {
+      let tot = 0;
+      materie.forEach(m => {
+        const used = m.uda.reduce((sum, u) => sum + (u.orePresenza || 0) + (u.oreDistanza || 0), 0);
+        tot += Math.max(0, m.ore - used);
+      });
+      return tot;
+    };
+
+    // Funzione per mostrare notifiche
+    const showNotification = (message: string, type: 'success' | 'error' | 'warning') => {
+      setNotification({ message, type });
+      setTimeout(() => setNotification(null), 5000);
+    };
+
+    // Salva su DB
+    const handleSaveAFM = async () => {
+      // Validazione: tutte le ore devono essere assegnate
+      let allHoursUsed = true;
+      let materieConOreMancanti: string[] = [];
+      materie.forEach(m => {
+        const used = m.uda.reduce((sum, u) => sum + (u.orePresenza || 0) + (u.oreDistanza || 0), 0);
+        if (m.ore - used > 0) {
+          allHoursUsed = false;
+          materieConOreMancanti.push(`${m.nome} (mancano ${m.ore - used} ore)`);
+        }
+      });
+      if (!allHoursUsed) {
+        showNotification(
+          `Devi utilizzare tutte le ore disponibili.\n\nMaterie con ore non ancora assegnate:\n- ${materieConOreMancanti.join('\n- ')}`,
+          'warning'
+        );
+        return;
+      }
+      // Mappa i dati come richiesto dal backend
+      const assegnazioni = materie.map(m => ({
+        sectionId: m.id,
+        sectionTitle: m.nome,
+        totalHours: m.ore,
+        subtopics: m.uda.map(u => ({
+          id: u.id,
+          code: '',
+          label: u.nome,
+          hours: u.orePresenza,
+          distanceHours: u.oreDistanza
+        }))
+      }));
+      try {
+        const response = await fetch('/api/assignments', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            livello: 'SecondoLivello',
+            livelloNome: 'Percorso AFM',
+            assegnazioni
+          })
+        });
+        const data = await response.json();
+        if (response.ok) {
+          setIsSaved(true);
+          showNotification('Assegnazione salvata con successo!', 'success');
+        } else {
+          showNotification('Errore nel salvataggio: ' + (data.error || 'Errore sconosciuto'), 'error');
+        }
+      } catch (error) {
+        showNotification('Errore di rete: ' + (error instanceof Error ? error.message : 'Errore sconosciuto'), 'error');
+      }
+    };
+
+    return (
+      <div className={styles.detailsContainer}>
+        {/* Notifica Toast */}
+        {notification && (
+          <div className={`${styles.notification} ${styles[notification.type]}`}>
+            <div className={styles.notificationContent}>
+              {notification.type === 'success' && <span className={styles.notificationIcon}>✓</span>}
+              {notification.type === 'error' && <span className={styles.notificationIcon}>✕</span>}
+              {notification.type === 'warning' && <span className={styles.notificationIcon}>⚠</span>}
+              <span className={styles.notificationMessage}>{notification.message}</span>
+            </div>
+            <button 
+              className={styles.notificationClose}
+              onClick={() => setNotification(null)}
+            >✕</button>
+          </div>
+        )}
+        <div className={styles.header} style={{justifyContent:'center',flexDirection:'column',alignItems:'center',textAlign:'center',gap:8}}>
+          <div style={{display:'flex',justifyContent:'space-between',alignItems:'center',width:'100%'}}>
+            <button type="button" className={styles.backButton} onClick={onBack}>
+              ← Indietro
+            </button>
+            <button className={styles.saveButton} style={{margin:'0 8px'}} onClick={handleSaveAFM}>Salva Assegnazione</button>
+          </div>
+          <h1 style={{margin:'16px 0 0 0',fontWeight:700,fontSize:28}}>Percorso AFM</h1>
+          <p style={{fontSize:16,color:'#444',margin:'8px 0 0 0'}}>Livelli A1 e A2 del Quadro Comune Europeo di Riferimento per le lingue.</p>
+        </div>
+        <div className={styles.infoPanel} style={{margin:'24px 0',justifyContent:'flex-start',textAlign:'left',alignItems:'center',display:'flex',flexDirection:'row',gap:'32px'}}>
+          <div className={styles.infoPanelItem}>
+            <span className={styles.infoPanelLabel}>Ore rimanenti da assegnare:</span>
+            <span className={`${styles.infoPanelValue} ${getTotalRemainingHours() === 0 ? styles.success : styles.warning}`}>{getTotalRemainingHours()} ore</span>
+          </div>
+          <div className={styles.infoPanelItem}>
+            <span className={styles.infoPanelLabel}>Stato salvataggio:</span>
+            <span className={`${styles.infoPanelValue} ${isSaved ? styles.success : styles.warning}`}>{isSaved ? '✓ Salvato' : '⚠ Non salvato'}</span>
+          </div>
+        </div>
+        <div className={styles.sectionsContainer}>
+          <div className={styles.tableView}>
+            <table className={styles.competenzeTable}>
+              <thead>
+                <tr>
+                  <th className={styles.competenzaCol}>Materia / UDA</th>
+                  <th className={styles.oreCol}>Ore in presenza</th>
+                  <th className={styles.oreCol}>Ore a distanza</th>
+                </tr>
+              </thead>
+              <tbody>
+                {materie.map((mat) => (
+                  <React.Fragment key={mat.id}>
+                    {/* Riga Titolo Materia */}
+                    <tr className={styles.sectionHeaderRow}>
+                      <td colSpan={3} className={styles.sectionHeaderCell} style={{padding:'18px 16px',fontSize:'18px',fontWeight:700,background:'#f7fafc',borderBottom:'2px solid #e2e8f0'}}>
+                        <span style={{color:'#0066cc'}}>{mat.nome}</span>
+                        <span style={{marginLeft:16,background:'#e6f0fa',color:'#0066cc',borderRadius:6,padding:'2px 10px',fontSize:15,fontWeight:600}}>{mat.ore} h totali</span>
+                      </td>
+                    </tr>
+                    {/* Se non ci sono UDA, mostra solo messaggio, NON mostrare input ore */}
+                    {mat.uda.length === 0 ? (
+                      <tr>
+                        <td colSpan={3} style={{textAlign:'center',color:'#888',fontSize:14,padding:'18px 0'}}>Aggiungi almeno una UDA per questa materia</td>
+                      </tr>
+                    ) : (
+                      mat.uda.map((uda, idx) => {
+                        // Calcola la somma delle ore assegnate a tutte le UDA tranne questa
+                        const otherOre = mat.uda.reduce((sum, u, i) => i !== idx ? sum + (u.orePresenza || 0) + (u.oreDistanza || 0) : sum, 0);
+                        const maxOrePresenza = mat.ore - otherOre - (uda.oreDistanza || 0);
+                        const maxOreDistanza = Math.min(Math.floor(mat.ore * 0.2), mat.ore - otherOre - (uda.orePresenza || 0));
+                        return (
+                          <tr key={uda.id}>
+                            <td className={styles.competenzaCell} style={{ paddingLeft: 32, display:'flex', alignItems:'center', gap:8 }}>
+                              <span className={styles.competenzaTitleEdit}>{uda.nome}</span>
+                              <button
+                                style={{marginLeft:8,background:'#fff',border:'1px solid #e53e3e',color:'#e53e3e',borderRadius:4,padding:'2px 8px',fontSize:13,cursor:'pointer'}}
+                                title="Elimina UDA"
+                                onClick={() => setMaterie(materie.map(m => m.id === mat.id ? {
+                                  ...m,
+                                  uda: m.uda.filter((u, i) => i !== idx)
+                                } : m))}
+                              >Elimina</button>
+                            </td>
+                            <td className={styles.oreCell}>
+                              <input
+                                type="number"
+                                className={`${styles.tableInput} tableInput`}
+                                min={0}
+                                max={maxOrePresenza >= 0 ? maxOrePresenza : 0}
+                                value={uda.orePresenza}
+                                onChange={e => {
+                                  let val = parseInt(e.target.value) || 0;
+                                  if (val > maxOrePresenza) val = maxOrePresenza >= 0 ? maxOrePresenza : 0;
+                                  if (val < 0) val = 0;
+                                  setMaterie(materie.map(m => m.id === mat.id ? {
+                                    ...m,
+                                    uda: m.uda.map((u, i) => i === idx ? { ...u, orePresenza: val } : u)
+                                  } : m));
+                                }}
+                              />
+                            </td>
+                            <td className={styles.oreCell}>
+                              <input
+                                type="number"
+                                className={`${styles.tableInput} tableInput`}
+                                min={0}
+                                max={maxOreDistanza >= 0 ? maxOreDistanza : 0}
+                                value={uda.oreDistanza}
+                                onChange={e => {
+                                  let val = parseInt(e.target.value) || 0;
+                                  if (val > maxOreDistanza) val = maxOreDistanza >= 0 ? maxOreDistanza : 0;
+                                  if (val < 0) val = 0;
+                                  setMaterie(materie.map(m => {
+                                    if (m.id !== mat.id) return m;
+                                    return {
+                                      ...m,
+                                      uda: m.uda.map((u, i) => {
+                                        if (i !== idx) return u;
+                                        // Se la somma supera il totale materia, abbassa orePresenza
+                                        let orePresenza = u.orePresenza || 0;
+                                        if (orePresenza + val > mat.ore) {
+                                          orePresenza = mat.ore - val;
+                                          if (orePresenza < 0) orePresenza = 0;
+                                        }
+                                        return { ...u, oreDistanza: val, orePresenza };
+                                      })
+                                    };
+                                  }));
+                                }}
+                              />
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
+                    {/* Form per aggiungere nuova UDA */}
+                    <tr className={styles.addCompetenzaRow}>
+                      <td colSpan={3} className={styles.addCompetenzaCell}>
+                        <div className={styles.addCompetenzaFormTable}>
+                          <input
+                            type="text"
+                            className={styles.competenzaTitleInputTable}
+                            placeholder="Nome nuova UDA"
+                            value={newUDA[mat.id]?.nome || ''}
+                            onChange={e => setNewUDA({ ...newUDA, [mat.id]: { ...newUDA[mat.id], nome: e.target.value } })}
+                            disabled={mat.uda.reduce((sum, u) => sum + (u.orePresenza || 0) + (u.oreDistanza || 0), 0) >= mat.ore}
+                          />
+                          <button
+                            className={styles.addCompetenzaButtonTable}
+                            onClick={() => {
+                              const used = mat.uda.reduce((sum, u) => sum + (u.orePresenza || 0) + (u.oreDistanza || 0), 0);
+                              if (newUDA[mat.id]?.nome && used < mat.ore) {
+                                setMaterie(materie.map(m => m.id === mat.id ? {
+                                  ...m,
+                                  uda: [
+                                    ...m.uda,
+                                    {
+                                      id: 'uda-' + (m.uda.length + 1),
+                                      nome: newUDA[mat.id].nome,
+                                      orePresenza: 0,
+                                      oreDistanza: 0
+                                    }
+                                  ]
+                                } : m));
+                                setNewUDA({ ...newUDA, [mat.id]: { nome: '' } });
+                              }
+                            }}
+                            disabled={mat.uda.reduce((sum, u) => sum + (u.orePresenza || 0) + (u.oreDistanza || 0), 0) >= mat.ore}
+                          >+ UDA</button>
+                        </div>
+                      </td>
+                    </tr>
+                  </React.Fragment>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   // Mostra loading se sta caricando i dati
   if (isLoadingData) {
     return (
@@ -697,6 +1127,17 @@ function AssegnazioneDetails({ level, onBack, editId }: AssegnazioneDetailsProps
         <div style={{ padding: '40px', textAlign: 'center' }}>
           <h2>Caricamento assegnazione in corso...</h2>
           <p>ID: {editId}</p>
+        </div>
+      </div>
+    );
+  }
+
+  if (!assignments) {
+    return (
+      <div className={styles.detailsContainer}>
+        <div style={{ padding: '40px', textAlign: 'center' }}>
+          <h2>Nessun dato disponibile</h2>
+          <p>Seleziona un percorso valido per visualizzare i dettagli.</p>
         </div>
       </div>
     );
@@ -727,8 +1168,8 @@ function AssegnazioneDetails({ level, onBack, editId }: AssegnazioneDetailsProps
       </button>
       <div className={styles.header}>
         <div>
-          <h1>{curriculum.name}</h1>
-          <p>{curriculum.description}</p>
+          <h1>{customTitle ? customTitle : curriculum.name}</h1>
+          <p>{curriculum && curriculum.description}</p>
         </div>
         <div className={styles.headerActions}>
           <div className={styles.viewModeToggle}>

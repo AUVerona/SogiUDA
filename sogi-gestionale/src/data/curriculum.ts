@@ -433,152 +433,47 @@ const curriculumModel = {
         name: 'Secondo livello',
         description: 'Seleziona il periodo didattico e la classe per accedere alle competenze.',
         isSecondLevelSelector: true,
-        periods: {
-            'primo-periodo': {
-                id: 'primo-periodo',
-                name: 'Primo Periodo Didattico',
-                classes: {
-                    'classe-i': {
-                        id: 'classe-i',
-                        name: 'I',
-                        sections: [
-                            {
-                                id: 'primo-periodo-i-italiano',
-                                title: 'Lingua e letteratura italiana',
-                                totalHours: 99,
-                                subtopics: []
+        indirizzi: {
+            tecnico: {
+                name: 'Tecnico',
+                voci: {
+                    afm: {
+                        name: 'AFM',
+                        periods: {
+                            'primo-periodo': {
+                                id: 'primo-periodo',
+                                name: 'Primo Periodo Didattico',
+                                classes: {
+                                    'classe-i': {
+                                        id: 'classe-i',
+                                        name: 'I',
+                                        sections: []
+                                    },
+                                    'classe-ii': {
+                                        id: 'classe-ii',
+                                        name: 'II',
+                                        sections: []
+                                    },
+                                    'completo': {
+                                        id: 'completo',
+                                        name: 'Completa',
+                                        sections: []
+                                    }
+                                }
                             },
-                            {
-                                id: 'primo-periodo-i-inglese',
-                                title: 'Lingua Inglese',
-                                totalHours: 66,
-                                subtopics: []
+                            'secondo-periodo': {
+                                id: 'secondo-periodo',
+                                name: 'Secondo Periodo Didattico',
+                                classes: {}
                             },
-                            {
-                                id: 'primo-periodo-i-matematica',
-                                title: 'Matematica',
-                                totalHours: 99,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-i-scienze',
-                                title: 'Scienze integrate',
-                                totalHours: 99,
-                                subtopics: []
+                            'terzo-periodo': {
+                                id: 'terzo-periodo',
+                                name: 'Terzo Periodo Didattico',
+                                sections: []
                             }
-                        ]
-                    },
-                    'classe-ii': {
-                        id: 'classe-ii', 
-                        name: 'II',
-                        sections: [
-                            {
-                                id: 'primo-periodo-ii-italiano',
-                                title: 'Lingua e letteratura italiana',
-                                totalHours: 99,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-ii-inglese',
-                                title: 'Lingua Inglese',
-                                totalHours: 66,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-ii-storia',
-                                title: 'Storia',
-                                totalHours: 99,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-ii-diritto',
-                                title: 'Diritto ed Economia',
-                                totalHours: 66,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-ii-matematica',
-                                title: 'Matematica',
-                                totalHours: 99,
-                                subtopics: []
-                            }
-                        ]
-                    },
-                    'completo': {
-                        id: 'completo',
-                        name: 'Completo',
-                        sections: [
-                            {
-                                id: 'primo-periodo-completo-italiano',
-                                title: 'Lingua e letteratura italiana',
-                                totalHours: 198,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-completo-inglese',
-                                title: 'Lingua Inglese',
-                                totalHours: 132,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-completo-storia',
-                                title: 'Storia',
-                                totalHours: 99,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-completo-diritto',
-                                title: 'Diritto ed Economia',
-                                totalHours: 66,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-completo-matematica',
-                                title: 'Matematica',
-                                totalHours: 198,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-completo-scienze',
-                                title: 'Scienze Integrate',
-                                totalHours: 99,
-                                subtopics: []
-                            },
-                            {
-                                id: 'primo-periodo-completo-religione',
-                                title: 'Religione Cattolica',
-                                totalHours: 33,
-                                subtopics: []
-                            }
-                        ]
+                        }
                     }
                 }
-            },
-            'secondo-periodo': {
-                id: 'secondo-periodo',
-                name: 'Secondo Periodo Didattico',
-                classes: {
-                    'classe-iii': {
-                        id: 'classe-iii',
-                        name: 'III',
-                        sections: []
-                    },
-                    'classe-iv': {
-                        id: 'classe-iv',
-                        name: 'IV', 
-                        sections: []
-                    },
-                    'completo': {
-                        id: 'completo',
-                        name: 'Completo',
-                        sections: []
-                    }
-                }
-            },
-            'terzo-periodo': {
-                id: 'terzo-periodo',
-                name: 'Terzo Periodo Didattico',
-                sections: []
             }
         }
     },
